@@ -1,0 +1,26 @@
+<?xml version = "1.0"?>
+<vxml version = "2.1" xmlns="http://www.w3.org/2001/vxml" application="root.php" xml:lang="fr-FR">
+  <form id="welcome">
+    <block name="block">
+      <if cond="jingle!=null &amp;&amp; jingle!=''">
+        <prompt><audio expr="'audios/'+jingle+'.wav'"/></prompt>
+        <script>log(machine+'(jingle): '+jingle);</script>
+      </if>
+      <if cond="welcome!=null &amp;&amp; welcome!=''">
+        <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="welcome"/></prompt>
+        <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="welcome"/></prompt>
+        <prompt cond="lang=='es'" xml:lang="es-ES"><value expr="welcome"/></prompt>
+        <script>log(machine+'(welcome): '+welcome);</script>
+      </if>
+      <if cond="voicexml">
+        <goto expr="voicexml+'/index.vxml'"/>
+      <else/>
+      <if cond="chatbot">
+        <goto expr="'chatbots/chatbot_'+chatbot+'.vxml'"/>
+      <else/>
+        <goto next="voicexml/index.vxml"/>
+      </if>
+      </if>
+    </block>
+  </form>
+ </vxml>

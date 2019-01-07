@@ -1,0 +1,71 @@
+<?xml version = "1.0"?>
+<vxml version = "2.1" xmlns="http://www.w3.org/2001/vxml" application="../root.php" xml:lang="es-ES">
+
+  <var name="start" expr="true"/>
+
+  <var name="prompt" expr="''"/>
+  <var name="msg" expr="''"/>
+  <var name="isInit" expr="true"/>
+
+  <var name="url_to_invoke" expr="''"/>
+  <var name="url_args"/>
+  <var name="url_result" expr="''"/>
+
+  <var name="answer" expr="'VIDE'" />
+  <var name="sessionId" expr="session.connection.remote.uri"/>
+
+  <form id="main">
+    <!-- Init for VCA -->
+    <block cond="start">
+      <assign name="msg" expr="'SALUDO'"/>
+      <log><value expr="name"/> : msg:<value expr="msg"/></log>
+      <data name="api" srcexpr="'http://vca103.mybluemix.net/WebBot/MessageChatAsync'" method="post" enctype="application/json;charset=utf-8" namelist="msg isInit" fetchtimeout="15s"/>
+      <log><value expr="name"/> : result:<value expr="api"/></log>
+      <log><value expr="name"/> : result status:<value expr="api.status"/></log>
+      <log><value expr="name"/> : result message:<value expr="api.message"/></log>
+      <assign name="start" expr="false"/>
+      <assign name="prompt" expr="''"/>
+      <if cond="api.message != ''">
+        <assign name="prompt" expr="api.message"/>
+        <script>log(name+': '+prompt);</script>
+      </if>
+      <script>log(name+'(init): '+prompt);</script>
+    </block>
+
+    <!-- Get the user input-->
+    <field cond="true" name = "text">
+      <property name="timeout" value="10s"/>
+      <property name="completetimeout" value="700ms"/>
+      <property name="interdigittimeout" value="3000ms"/>
+      <property name="sensitivity" value="0.5"/>
+      <grammar srcexpr="'builtin:grammar/text?'+lang"/>
+      <grammar srcexpr="'alias_'+lang+'.grxml'"/>
+      <grammar srcexpr="'phrases_'+lang+'.txt'"/>
+      <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="prompt"/></prompt>
+      <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="prompt"/></prompt>
+      <prompt cond="lang=='es'" xml:lang="es-ES"><value expr="prompt"/></prompt>
+      <filled>
+        <prompt cond="lang=='fr' &amp;&amp; echo" xml:lang="fr-FR">Vous avez dit: <value expr="text"/></prompt>
+        <prompt cond="lang=='en' &amp;&amp; echo" xml:lang="en-UK">You said: <value expr="text"/></prompt>
+        <prompt cond="lang=='es' &amp;&amp; echo" xml:lang="es-ES">Has dicho: <value expr="text"/></prompt>
+        <script>log('User: '+text);</script>
+      </filled>
+    </field>
+
+    <!-- Process the user input -->
+    <block name="block">
+      <log><value expr="name"/> : input:<value expr="text"/></log>
+      <assign name="msg" expr="text"/>
+      <data name="api" srcexpr="'http://vca103.mybluemix.net/WebBot/MessageChatAsync'" method="post" enctype="application/json;charset=utf-8" namelist="msg" fetchtimeout="15s"/>
+      <log><value expr="name"/> : result:<value expr="api"/></log>
+      <assign name="queries" expr="queries+1"/>
+
+      <if cond="api.message != null">
+        <assign name="prompt" expr="api.message"/>
+        <script>log(name+': '+prompt);</script>
+      </if>
+
+      <goto next="#main"/>
+    </block>
+  </form>
+ </vxml>
