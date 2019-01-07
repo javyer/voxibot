@@ -1,4 +1,4 @@
-Voxibot (VoiceXML and chatbot scripts)
+Voxibot (VoiceXML/PHP chatbot scripts)
 ======================================
 
 Voxibot is a collection of VoiceXML and PHP files that form a solid base for any voicebot/callbot project. Voxibot scripts have been created for use on the Voximal platform. 
