@@ -1,7 +1,21 @@
 Voxibot (VoiceXML/PHP chatbot scripts)
 ======================================
 
-Voxibot is a collection of VoiceXML and PHP files that form a solid base for any voicebot/callbot project. Voxibot scripts have been created for use on the Voximal platform. 
+Voxibot is a collection of VoiceXML and PHP files that form a solid base for any voicebot/callbot project. Voxibot scripts have been created for use on the Voximal platform (and Dialogflow Agents). 
+
+Chatbot platforms supported :
+
+  - Dialogflow (RPC/REST)
+  - Watson
+  - Pandorabots
+  - Retorik (Davi)
+  - Smartly
+  - Kwalys
+  - HelloMyBot
+  - VCA Peru
+  - Recast
+  - Wit
+  - ...
 
 To try out Voxibot, install or activate a Voximal platform, and upload the files of this Repository. 
 Rename the file config_example.php to confg.php.
