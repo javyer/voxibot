@@ -36,7 +36,7 @@
         <script>log(name+'(): '+answer);</script>
       </if>
       <if cond="api.hasOwnProperty('sessionid')">
-        <assign name="sessionid" expr="false"/>
+        <assign name="sessionid" expr="api.sessionid"/>
       </if>
 
     </block>
