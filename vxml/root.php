@@ -56,7 +56,21 @@
 	<var name="end_time" expr="start_time"/>
 
   <!-- DATABASE contexts -->
-  <var name="webservice" expr="'../../database/set.php'" />
+<?php if (isset($config['db']['url'])) { ?>
+  <var name="url" expr="'<?php echo($config['db']['url']); ?>'" />
+<?php } else { ?>
+  <var name="url" expr="''" />
+<?php } ?>
+<?php if (isset($config['db']['index'])) { ?>
+  <var name="index" expr="'<?php echo($config['db']['url']); ?>'" />
+<?php } else { ?>
+  <var name="index" expr="'PHONE_APPELE'" />
+<?php } ?>
+<?php if (isset($config['db']['value'])) { ?>
+  <var name="value" expr="'<?php echo($config['db']['value']); ?>'" />
+<?php } else { ?>
+  <var name="value" expr="caller" />
+<?php } ?>
   <var name="get" expr="new Object();" />
   <var name="set" expr="new Object();" />
 
@@ -138,7 +152,7 @@
   <var name="record" expr="true"/>
   <var name="mail" expr="true"/>
 
-<?php if (isset($config['chatbot']['database'])) { ?>
+<?php if (isset($config['chatbot']['database']) || isset($config['db']['url'])) { ?>
   <var name="database" expr="true"/>
 <?php } else { ?>
   <var name="database" expr="false"/>
@@ -286,7 +300,8 @@ function update()
       <assign name="rand" expr="Math.floor(Math.random()*(noinput_es.length-1))"/>
       <assign name="noinput" expr="noinput_es[rand]"/>
     </if>
-    <script>log(machine+'(noinput:1): '+noinput);</script>
+    <script>log(humain+': (noinput:1)');</script>
+    <script>log(machine+': '+noinput);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="noinput"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="noinput"/></prompt>
     <prompt cond="lang=='es'" xml:lang="es-ES"><value expr="noinput"/></prompt>
@@ -307,7 +322,8 @@ function update()
       <assign name="rand" expr="Math.floor(Math.random()*(noinput_es.length-1))"/>
       <assign name="noinput" expr="noinput_es[rand]"/>
     </if>
-    <script>log(machine+'(noinput:2,reprompt): '+noinput+' '+prompt);</script>
+    <script>log(humain+': (noinput:2,reprompt)');</script>
+    <script>log(machine+': '+noinput+' '+prompt);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="noinput"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="noinput"/></prompt>
     <prompt cond="lang=='es'" xml:lang="es-ES"><value expr="noinput"/></prompt>
@@ -329,7 +345,8 @@ function update()
       <assign name="rand" expr="Math.floor(Math.random()*(noinput_es.length-1))"/>
       <assign name="noinput" expr="repeat_es[rand]"/>
     </if>
-    <script>log(machine+'(noinput:3,reprompt): '+noinput+' '+prompt);</script>
+    <script>log(humain+': (noinput:3,reprompt)');</script>
+    <script>log(machine+': '+noinput+' '+prompt);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="noinput"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="noinput"/></prompt>
     <prompt cond="lang=='es'" xml:lang="es-ES"><value expr="noinput"/></prompt>
@@ -348,7 +365,8 @@ function update()
     <if cond="lang=='es'">
       <assign name="noinput" expr="noinput_es[noinput_es.length-1]"/>
     </if>
-    <script>log(machine+'(noinput:4,hangup):  '+noinput);</script>
+    <script>log(humain+': (noinput:4,hangup)');</script>
+    <script>log(machine+':  '+noinput);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR" bargein="false"><value expr="noinput"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK" bargein="false"><value expr="noinput"/></prompt>
     <prompt cond="lang=='es'" xml:lang="es-ES" bargein="false"><value expr="noinput"/></prompt>
@@ -370,7 +388,8 @@ function update()
       <assign name="rand" expr="Math.floor(Math.random()*(nomatch_es.length-1))"/>
       <assign name="nomatch" expr="nomatch_es[rand]"/>
     </if>
-    <script>log(machine+'(nomatch:1): '+nomatch);</script>
+    <script>log(humain+': (nomatch:1) ?');</script>
+    <script>log(machine+': '+nomatch);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='es'" xml:lang="es-ES"><value expr="nomatch"/></prompt>
@@ -391,7 +410,8 @@ function update()
       <assign name="rand" expr="Math.floor(Math.random()*(nomatch_es.length-1))"/>
       <assign name="nomatch" expr="nomatch_es[rand]"/>
     </if>
-    <script>log(machine+'(nomatch:2,reprompt): '+nomatch+' '+prompt);</script>
+    <script>log(humain+': (nomatch:2,reprompt) ?');</script>
+    <script>log(machine+': '+nomatch+' '+prompt);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='es'" xml:lang="es-ES"><value expr="nomatch"/></prompt>
@@ -413,7 +433,8 @@ function update()
       <assign name="rand" expr="Math.floor(Math.random()*(nomatcht_es.length-1))"/>
       <assign name="nomatch" expr="repeat_es[rand]"/>
     </if>
-    <script>log(machine+'(nomatch:3,reprompt): '+nomatch+' '+prompt);</script>
+    <script>log(humain+': (nomatch:3,reprompt) ?');</script>
+    <script>log(machine+': '+nomatch+' '+prompt);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='es'" xml:lang="es-ES"><value expr="nomatch"/></prompt>
@@ -432,7 +453,8 @@ function update()
     <if cond="lang=='es'">
       <assign name="nomatch" expr="nomatch_es[noinput_es.length-1]"/>
     </if>
-    <script>log(machine+'(nomatch:4,hangup):  '+nomatch);</script>
+    <script>log(humain+': (nomatch:4,hangup) ?');</script>
+    <script>log(machine+':  '+nomatch);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR" bargein="false"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK" bargein="false"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='es'" xml:lang="es-ES" bargein="false"><value expr="nomatch"/></prompt>
@@ -461,7 +483,6 @@ function update()
     </block>
     <var name="phone" expr="caller" />
     <var name="datas" expr="set" />
-    <var name="value" expr="caller" />
     <var name="subject" expr="'['+name.toUpperCase()+'] Call ('+caller+', '+queries+', '+result+')'"/>
     <var name="body" expr="''" />
     <block>
@@ -478,8 +499,7 @@ function update()
       <param name="src" expr="'file://'+filename$.value"/>
     </object>
     <block cond="database">
-      <var name="key" expr="'PHONE_APPELE'" />
-      <data name="database" srcexpr="webservice" method="post" namelist="key value datas set" fetchtimeout="15s"/>
+      <data name="update" srcexpr="url" method="post" namelist="caller called param id duration index value datas set" fetchtimeout="15s"/>
     </block>
     <block cond="mail">
       <data name="mail" src="https://192.voximal.net:44192/vxml/mailer/mail.php" method="post" enctype="multipart/form-data" namelist="key address subject body attachment format" fetchtimeout="15s"/>
