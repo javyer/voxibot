@@ -34,8 +34,10 @@
   <property name="maxspeechtimeout" value="10s"/>
   <property name="fetchaudiodelay" value="0s"/>
   <property name="fetchaudiominimum" value="10s"/>
-  <property name="speedvsaccuracy" value="0.2"/>
-  <property name="minspeech" value="1500ms"/>
+  <property name="speedvsaccuracy" value="0.5"/>
+  <property name="completetimeout" value="5s"/>
+  <property name="incompletetimeout" value="0s"/>
+  <property name="minspeech" value="0ms"/>
 
 
   <!-- CALL configuration -->
@@ -104,9 +106,9 @@
   'Je ne vous entends toujours pas, je vous propose de me rappeler ultérieurement. Au revoir.'
   ]"/><!-- Noinput messages -->
   <var name="nomatch_fr" expr="[
-  'Je ne vous ai pas compris.',
-  'Je ne vous comprends pas.',
-  'J\'ai un problème pour vous comprendre.',
+  'Je ne vous ai pas compris. Pouvez-vous répéter, s\'il vous plait ?',
+  'Je ne vous comprends pas. Pouvez-vous recommencer, s\'il vous plait ?',
+  'J\'ai un problème pour vous comprendre. S\'il vous plait, pouvez-vous répéter ? ',
   'Je ne vous comprends toujours pas, je vous propose de me rappeler ultérieurement. Au revoir.'
   ]"/><!-- Nomatch messages -->
   <var name="repeat_fr" expr="[
@@ -117,11 +119,11 @@
 
   <var name="welcome_en" expr="'This automated call will be recorded.'"/><!-- Welcome message -->
   <var name="noinput_en" expr="[
-  'I can\'t hear you.',
+  'I can\'t hear you. Can you repeat please?',
   'Sorry, I can\'t hear you. Please call me later.'
   ]"/><!-- Noinput messages -->
   <var name="nomatch_en" expr="[
-  'I didn\t understand you.',
+  'I didn\'t understand you. Can you repeat please?',
   'Sorry, I can\'t understand you. Please call me later. Goodbye.',
   ]"/><!-- Nomatch messages -->
   <var name="repeat_en" expr="[
