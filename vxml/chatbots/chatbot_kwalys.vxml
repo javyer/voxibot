@@ -8,8 +8,7 @@
   <var name="prompt_audio" expr="''"/>
 
   <script>
-var data = { APPAREIL:'tel', NUMERO:caller };
-var data2 = { CLIENT:'Voxibot', CALLER:caller, CALLED:called, ID:id, PARAM:param };
+var data = { CLIENT:'Voxibot', CALLER:'0'+caller, CALLED:called, ID:id, PARAM:param };
   </script>
 
   <var name="answer" expr="'VIDE'" />
@@ -99,15 +98,13 @@ var data2 = { CLIENT:'Voxibot', CALLER:caller, CALLED:called, ID:id, PARAM:param
           <assign name="prompt2" expr="api.chatbot.text2"/>
           <if cond="api.hasOwnProperty('human')">
            <assign name="tracking" expr="api.human[0].tracking"/>
-           <else/>
-           <assign name="tracking" expr="'?'"/>
           </if>
           <assign name="answer" expr="prompt" />
           <if cond="prompt2 != undefined" >
             <assign name="answer" expr="prompt + ' ... ' + prompt2"/>
           </if>
           <assign name="start" expr="false"/>
-          <script>log(machine+'(type:'+type+',tracking:'+tracking+'): ');</script>
+          <script>if(debug) log(machine+'(type:'+type+',tracking:'+tracking+'): ');</script>
 
           <if cond="api.chatbot.hasOwnProperty('actions')">
             <assign name="action" expr="api.chatbot.actions"/>
