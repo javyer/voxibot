@@ -59,9 +59,9 @@
 
   <!-- DATABASE contexts -->
 <?php if (isset($config['db']['url'])) { ?>
-  <var name="url" expr="'<?php echo($config['db']['url']); ?>'" />
+  <var name="database" expr="'<?php echo($config['db']['url']); ?>'" />
 <?php } else { ?>
-  <var name="url" expr="''" />
+  <var name="database" expr="false" />
 <?php } ?>
 <?php if (isset($config['db']['index'])) { ?>
   <var name="index" expr="'<?php echo($config['db']['url']); ?>'" />
@@ -151,11 +151,19 @@
 
   <var name="echo" expr="false"/>
   <var name="details" expr="true"/>
-  <var name="record" expr="true"/>
-  <var name="mail" expr="true"/>
+<?php if (isset($config['mail']['record']) && ($config['mail']['record'])) { ?>
+  <var name="record" expr="true" />
+<?php } else { ?>
+  <var name="record" expr="false" />
+<?php } ?><?php if (isset($config['mail']['url']) && $config['mail']['url']) { ?>
+  <var name="mail" expr="'<?php echo($config['mail']['url']); ?>'" />
+<?php } else { ?>
+  <var name="mail" expr="false" />
+<?php } ?>
 
-<?php if (isset($config['chatbot']['database']) || isset($config['db']['url'])) { ?>
-  <var name="database" expr="true"/>
+
+<?php if (isset($config['db']['url']) && $config['db']['url']) { ?>
+  <var name="database" expr="<?php echo($config['db']['url']); ?>"/>
 <?php } else { ?>
   <var name="database" expr="false"/>
 <?php } ?>
@@ -495,16 +503,16 @@ function update()
        <assign name="body" expr="body+'Logs:'+logs+'\n\n'"/>
       </if>
     </block>
-    <transfer cond="mail &amp; record" bridge="true" dest="execute:stopmixmonitor()"/>
-    <transfer cond="mail &amp; record" name="filename" bridge="true" dest="execute:get(MIXMONITOR_FILENAME)" />
-    <object cond="mail &amp; record &amp; filename$.value!=''" name="attachment"  classid="pick">
+    <transfer cond="mail &amp;&amp; record" bridge="true" dest="execute:stopmixmonitor()"/>
+    <transfer cond="mail &amp;&amp; record" name="filename" bridge="true" dest="execute:get(MIXMONITOR_FILENAME)" />
+    <object cond="mail &amp;&amp; record &amp; filename$.value!=''" name="attachment"  classid="pick">
       <param name="src" expr="'file://'+filename$.value"/>
     </object>
     <block cond="database">
-      <data name="update" srcexpr="url" method="post" namelist="caller called param id duration index value datas set" fetchtimeout="15s"/>
+      <data name="data_database" srcexpr="database" method="post" namelist="caller called param id duration index value datas set" fetchtimeout="15s"/>
     </block>
     <block cond="mail">
-      <data name="mail" src="https://192.voximal.net:44192/vxml/mailer/mail.php" method="post" enctype="multipart/form-data" namelist="key address subject body attachment format" fetchtimeout="15s"/>
+      <data name="data_mail" srcexpr="mail" method="post" enctype="multipart/form-data" namelist="key address subject body attachment format" fetchtimeout="15s"/>
     </block>
     <block>
       <exit expr="result"/>
