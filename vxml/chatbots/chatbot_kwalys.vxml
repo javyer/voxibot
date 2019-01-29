@@ -1,5 +1,7 @@
 <?xml version = "1.0"?>
 <vxml version = "2.1" xmlns="http://www.w3.org/2001/vxml" application="../root.php">
+  <property name="inputmodes" value="voice"/>
+
   <var name="start" expr="true"/>
 
   <var name="prompt" expr="''"/>
