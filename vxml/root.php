@@ -11,14 +11,26 @@
 <?php if (isset($config['prompt']['format'])) { ?>
   <property name="promptformat" value="<?php echo($config['prompt']['format']); ?>"/>
 <?php } ?>
+<?php if (isset($config['prompt']['method'])) { ?>
+  <property name="promptmethod" value="<?php echo($config['prompt']['method']); ?>"/>
+<?php } ?>
 <?php if (isset($config['prompt']['voice'])) { ?>
   <property name="promptvoice" value="<?php echo($config['prompt']['voice']); ?>"/>
+<?php } ?>
+<?php if (isset($config['prompt']['ssml'])) { ?>
+  <property name="promptssml" value="<?php echo($config['prompt']['ssml'] ? 'true' : 'false'); ?>"/>
 <?php } ?>
 <?php if (isset($config['prompt']['key'])) { ?>
   <property name="promptkey" value="<?php echo($config['prompt']['key']); ?>"/>
 <?php } ?>
 <?php if (isset($config['prompt']['language'])) { ?>
   <property name="promptlanguage" value="<?php echo($config['prompt']['language']); ?>"/>
+<?php } ?>
+<?php if (isset($config['prompt']['user'])) { ?>
+  <property name="promptuser" value="<?php echo($config['prompt']['user']); ?>"/>
+<?php } ?>
+<?php if (isset($config['prompt']['password'])) { ?>
+  <property name="promptpassword" value="<?php echo($config['prompt']['password']); ?>"/>
 <?php } ?>
 
   <!-- STT configuration -->
@@ -44,7 +56,12 @@
   <var name="caller" expr="session.connection.remote.uri"/>
   <var name="called" expr="session.connection.local.uri"/>
   <var name="id" expr="telephone.id"/>
+
+<?php if (isset($config['chatbot']['param'])) { ?>
+  <var name="param" expr="'<?php echo($config['chatbot']['param']); ?>'" />
+<?php } else { ?>
   <var name="param" expr="telephone.param"/>
+<?php } ?>
   <var name="location" expr="'?'"/>
   <var name="timezone" expr="'Europe/Paris'"/>
   <var name="caller_profile" expr=""/>
@@ -398,7 +415,7 @@ function update()
       <assign name="rand" expr="Math.floor(Math.random()*(nomatch_es.length-1))"/>
       <assign name="nomatch" expr="nomatch_es[rand]"/>
     </if>
-    <script>log(humain+': (nomatch:1) ?');</script>
+    <script>log(humain+': (nomatch:1) '+lastresult$.utterance);</script>
     <script>log(machine+': '+nomatch);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="nomatch"/></prompt>
@@ -420,7 +437,7 @@ function update()
       <assign name="rand" expr="Math.floor(Math.random()*(nomatch_es.length-1))"/>
       <assign name="nomatch" expr="nomatch_es[rand]"/>
     </if>
-    <script>log(humain+': (nomatch:2,reprompt) ?');</script>
+    <script>log(humain+': (nomatch:2,reprompt) '+lastresult$.utterance);</script>
     <script>log(machine+': '+nomatch+' '+prompt);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="nomatch"/></prompt>
@@ -443,7 +460,7 @@ function update()
       <assign name="rand" expr="Math.floor(Math.random()*(nomatcht_es.length-1))"/>
       <assign name="nomatch" expr="repeat_es[rand]"/>
     </if>
-    <script>log(humain+': (nomatch:3,reprompt) ?');</script>
+    <script>log(humain+': (nomatch:3,reprompt) '+lastresult$.utterance);</script>
     <script>log(machine+': '+nomatch+' '+prompt);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="nomatch"/></prompt>
@@ -463,7 +480,7 @@ function update()
     <if cond="lang=='es'">
       <assign name="nomatch" expr="nomatch_es[noinput_es.length-1]"/>
     </if>
-    <script>log(humain+': (nomatch:4,hangup) ?');</script>
+    <script>log(humain+': (nomatch:4,hangup) '+lastresult$.utterance);</script>
     <script>log(machine+':  '+nomatch);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR" bargein="false"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK" bargein="false"><value expr="nomatch"/></prompt>
