@@ -31,6 +31,10 @@ $config['google']['dialogflow'] = "****"; // Dialogflow V1
 $config['google']['speech'] = "****";  // Facebook
 
 $headers = apache_request_headers();
+if (isset($_REQUEST['param']))
+{
+  @include("configs/".$_REQUEST['param'].".php");
+}
 if (isset($headers['Voximal-Parameter']))
 {
   @include("configs/".$headers['Voximal-Parameter'].".php");
