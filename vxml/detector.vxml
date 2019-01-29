@@ -12,9 +12,23 @@
       <prompt>
         <audio src="application:Wait(1)"/>
       </prompt>
-      <prompt>
-        Allô?
-      </prompt>
+
+      <if cond="lang=='fr'">
+        <assign name="prompt" expr="'Allô?'"/>
+      </if>
+      <if cond="lang=='en'">
+        <assign name="prompt" expr="'Hello'"/>
+      </if>
+      <if cond="lang=='es'">
+        <assign name="prompt" expr="'¿Diga?'"/>
+      </if>
+
+      <script>log(name+'(dialer): '+prompt);</script>
+
+      <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="prompt"/></prompt>
+      <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="prompt"/></prompt>
+      <prompt cond="lang=='es'" xml:lang="es-ES"><value expr="prompt"/></prompt>
+
     </block>
     <transfer name="amdstatus" bridge="true" dest="application:AMD()=AMDSTATUS" />
     <transfer name="amdcause" bridge="true" dest="execute:get(AMDCAUSE)" />
