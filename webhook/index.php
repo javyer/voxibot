@@ -18,10 +18,15 @@ exit;
 
 // Get the Json request
 
+debug("\n\n\n");
+debug("-----------------------------------------------------------------------------\n");
+debug("\n\n\n");
+
+debug("---- REQUEST START");
+
 $fulfillment_request = file_get_contents("php://input");
 $fulfillment = json_decode($fulfillment_request, true);
 
-debug("\n\n\n");
 debug(">>>> JSON : ".json_encode($fulfillment, JSON_PRETTY_PRINT));
 debug("---- PROCESS START");
 
@@ -65,7 +70,7 @@ if ($apiversion==1)
   }
   else
   {
-    debug("Retreive session=" . json_encode($_SESSION));
+    debug("Retreive session=" . json_encode($_SESSION, JSON_PRETTY_PRINT));
   }
 
   if (isset($fulfillment["lang"])) {
@@ -198,7 +203,7 @@ if ($apiversion==2)
   {
     //debug("    Agent=".$_SERVER['HTTP_USER_AGENT']);
     $_SESSION['id'] = session_id();
-    debug("    session=" . $_SESSION['id']);
+    debug("    session(id)=" . $_SESSION['id']);
   }
 
   // Language
@@ -221,7 +226,7 @@ if ($apiversion==2)
       $GLOBALS["parameters"][$key] = utf8_decode(template($GLOBALS["parameters"][$key]));
     }
 
-    debug("    parameters=".json_encode($GLOBALS['parameters']));
+    debug("    parameters=".json_encode($GLOBALS['parameters'], JSON_PRETTY_PRINT));
   }
 
   // Store the text
@@ -268,6 +273,15 @@ if ($apiversion==2)
       $_SESSION["caller"] = 'google';
       $_SESSION["called"] = 'google/voxibot';
       $_SESSION["user"] = database_get($_SESSION["userId"], "google");
+      debug("    user(google)=".json_encode($_SESSION["user"], JSON_PRETTY_PRINT));
+    }
+
+    // google
+    if ($fulfillment["originalDetectIntentRequest"]["source"] == "GOOGLE_TELEPHONY")
+    if (isset($fulfillment["originalDetectIntentRequest"]["payload"]["telephony"])) {
+      $_SESSION["caller"] = $fulfillment["originalDetectIntentRequest"]["payload"]["telephony"]["caller_id"];
+      $_SESSION["called"] = 'google/voxibot';
+      $_SESSION["user"] = database_get($_SESSION["caller"], "voxibot");
       debug("    user(google)=".json_encode($_SESSION["user"], JSON_PRETTY_PRINT));
     }
 
@@ -496,20 +510,37 @@ if (isset($GLOBALS['action']))
           break;
       case 'data':
           {
-            $_SESSION["data"] = database_get($GLOBALS["parameters"]["value"], "voxibot");
+            debug("parameter for action Data ".$GLOBALS["parameters"]["destination"]);
+            $_SESSION["data"] = database_get($GLOBALS["parameters"]["destination"], "voxibot");
             debug("    data=".json_encode($_SESSION["data"]));
           }
           break;
       case 'callback':
           {
-            if ($fulfillment["originalRequest"]["source"] == "google")
-            include "call/index.php";
+            if (isset($fulfillment["originalDetectIntentRequest"]["source"]))
+            if ($fulfillment["originalDetectIntentRequest"]["source"] == "google")
+            {
+              include "actions/call/index.php";
+            }
           }
           break;
+      case 'transfer':
       case 'call':
           {
-            if ($fulfillment["originalRequest"]["source"] == "google")
-            include "call/index.php";
+            debug("parameter for action transfer ".$GLOBALS["parameters"]["destination"]);
+
+            if (!isset($GLOBALS["parameters"]["destination"]))
+            {
+              debug("    Ask phone number...");
+              $GLOBALS['result']['event']='ask_phone';
+            }
+            else
+            if (isset($fulfillment["originalDetectIntentRequest"]["source"]))
+            if ($fulfillment["originalDetectIntentRequest"]["source"] == "google")
+            {
+              include "actions/call/index.php";
+            }
+
           }
           break;
       case 'repeat':
@@ -599,6 +630,8 @@ sendMessage($message_answer);
 
 $_SESSION["messages"] = $GLOBALS["messages"];
 
-debug("    session=" . json_encode($_SESSION));
+debug("    session=" . json_encode($_SESSION, JSON_PRETTY_PRINT));
+
+debug("---- REQUEST END");
 
 ?>
