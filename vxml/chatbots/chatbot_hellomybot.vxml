@@ -11,7 +11,7 @@
   <var name="sessionId" expr="id"/>
   <var name="from" expr="caller"/>
   <var name="action" expr="caller"/>
-  <var name="locale" expr="'fr'"/>
+  <var name="locale" expr="lang"/>
   <var name="input" expr="'?'"/>
   <var name="action" expr="'welcome'"/>
   <var name="parameter" expr="''"/>
@@ -94,6 +94,7 @@
 
         <if cond="api.hasOwnProperty('action')">
           <assign name="action" expr="api.action.toLowerCase()"/>
+          <script>log(machine+'(action:'+action+')');</script>
         </if>
 
         <if cond="action">
