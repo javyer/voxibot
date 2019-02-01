@@ -43,7 +43,7 @@
   <property name="sensitility" value="0.7"/>
   <property name="timeout" value="7s"/>
   <property name="continuetimeout" value="0s"/>
-  <property name="maxspeechtimeout" value="10s"/>
+  <property name="maxspeechtimeout" value="15s"/>
   <property name="fetchaudiodelay" value="0s"/>
   <property name="fetchaudiominimum" value="10s"/>
   <property name="speedvsaccuracy" value="0.5"/>
@@ -113,7 +113,12 @@
 <?php } ?>
 
   <var name="lang" expr="'<?php echo($config['recognize']['language']); ?>'"/><!-- Language (fr,en,es)-->
+
+<?php if (isset($config['recognize']['detector'])) { ?>
+  <var name="detector" expr="<?php echo($config['recognize']['detector'] ? 'true' : 'false'); ?>"/>
+<?php } else { ?>
   <var name="detector" expr="true"/>
+<?php } ?>
 
   <var name="welcome_fr" expr="'Cette appel automatisé sera enregistré.'"/><!-- Welcome message -->
   <var name="noinput_fr" expr="[
