@@ -70,17 +70,19 @@
       <assign name="queries" expr="queries+1"/>
 
       <if cond="api.hasOwnProperty('responses')">
-          <assign name="prompt" expr="api.responses[0]"/>
-          <assign name="answer" expr="prompt" />
-          <if cond="prompt2 != undefined" >
-            <assign name="answer" expr="prompt + ' ... ' + prompt2"/>
-          </if>
-          <assign name="start" expr="false"/>
-          <script>log(name+'(): '+answer);</script>
+        <assign name="prompt" expr="api.responses[0]"/>
+        <assign name="answer" expr="prompt" />
+        <if cond="prompt2 != undefined" >
+          <assign name="answer" expr="prompt + ' ... ' + prompt2"/>
+        </if>
+        <assign name="start" expr="false"/>
+        <script>log(name+'(): '+answer);</script>
 
-
-
-        <assign name="action" expr="'?'"/>
+        <if cond="prompt == ''">
+          <assign name="action" expr="'hangup'"/>
+        <else/>
+          <assign name="action" expr="'?'"/>
+        </if>
 
         <if cond="action">
           <var name="actions" expr="action.split(';', 5);"/>
