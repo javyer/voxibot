@@ -18,6 +18,9 @@
      <if cond="detector">
        <goto next="detector.vxml"/>
      <else/>
+      <prompt>
+        <audio src="application:Wait(1)"/>
+      </prompt>
        <goto next="welcome.vxml"/>
      </if>
    <else/>
