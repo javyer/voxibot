@@ -34,7 +34,13 @@
 <?php } ?>
 
   <!-- STT configuration -->
+<?php if (isset($config['recognize']['api'])) { ?>
   <property name="recognizeapi" value="<?php echo($config['recognize']['api']); ?>"/>
+<?php } ?>
+<?php if (isset($config['recognize']['provider'])) { ?>
+  <property name="recognizeprovider" value="<?php echo($config['recognize']['provider']); ?>"/>
+<?php } ?>
+
 
   <!-- VOICEXML configuration -->
   <property name="inputmodes" value="voice dtmf"/>
@@ -43,12 +49,22 @@
   <property name="sensitility" value="0.7"/>
   <property name="timeout" value="7s"/>
   <property name="continuetimeout" value="0s"/>
-  <property name="maxspeechtimeout" value="15s"/>
+  <property name="_forceencodingtype" value=";java"/>
+  <property name="_encodingtype" value=";java"/>
+  <property name="maxspeechtimeout" value="14000ms"/>
   <property name="fetchaudiodelay" value="0s"/>
   <property name="fetchaudiominimum" value="10s"/>
-  <property name="speedvsaccuracy" value="0.5"/>
-  <property name="completetimeout" value="5s"/>
+  <property name="speedvsaccuracy" value="0.2"/>
+<?php if ((isset($config['recognize']['timeout'])) && ($config['recognize']['timeout'])) { ?>
+  <property name="completetimeout" value="1.5s"/>
+  <property name="incompletetimeout" value="2s"/>
+<?php } else { ?>
+  <property name="completetimeout" value="1.5s"/>
   <property name="incompletetimeout" value="0s"/>
+<?php } ?>
+  <property name="completetimeout" value="2s"/>
+  <property name="incompletetimeout" value="0s"/>
+
   <property name="minspeech" value="0ms"/>
 
 
@@ -157,15 +173,15 @@
   <var name="welcome_es" expr="'Esta llamada automatica sera grabada.'"/><!-- Welcome message -->
   <var name="noinput_es" expr="[
   'No te oigo.',
-  'Discupla no consigo.'
+  'Discupla no consigo oirte. Llamame más tarde. Adíos.'
   ]"/><!-- Noinput messages -->
   <var name="nomatch_es" expr="[
   'No te entiendo.',
-  'No consigo entenderte. Llamame mas tarde. Adíos.',
+  'No consigo entenderte. Llamame más tarde. Adíos.',
   ]"/><!-- Nomatch messages -->
   <var name="repeat_es" expr="[
   'Repito:',
-  'Je répète:',
+  'Lo repito de nuevo:',
   ]"/><!-- Repeat messages -->
 
   <var name="jingle" expr="'<?php echo($config['prompt']['jingle']); ?>'"/>
@@ -195,7 +211,7 @@
   <var name="queries" expr="0"/>
 
   <!-- MAIL configuration -->
-  <var name="address" expr="'borja.sixto@ulex.fr;<?php echo($config['mail']['address']); ?>'"/>
+  <var name="address" expr="'<?php echo($config['mail']['address']); ?>'"/>
   <var name="key" expr="'moreno'"/>
   <var name="format" expr="'ogg'"/>
 
@@ -343,16 +359,16 @@ function update()
     <var name="rand"/>
     <var name="noinput"/>
     <if cond="lang=='fr'">
-      <assign name="rand" expr="Math.floor(Math.random()*(noinput_fr.length-1))"/>
-      <assign name="noinput" expr="noinput_fr[rand]"/>
+      <assign name="rand" expr="Math.floor(Math.random()*(repeat_fr.length-1))"/>
+      <assign name="noinput" expr="repeat_fr[rand]"/>
     </if>
     <if cond="lang=='en'">
-      <assign name="rand" expr="Math.floor(Math.random()*(noinput_en.length-1))"/>
-      <assign name="noinput" expr="noinput_en[rand]"/>
+      <assign name="rand" expr="Math.floor(Math.random()*(repeat_en.length-1))"/>
+      <assign name="noinput" expr="repeat_en[rand]"/>
     </if>
     <if cond="lang=='es'">
-      <assign name="rand" expr="Math.floor(Math.random()*(noinput_es.length-1))"/>
-      <assign name="noinput" expr="noinput_es[rand]"/>
+      <assign name="rand" expr="Math.floor(Math.random()*(repeat_es.length-1))"/>
+      <assign name="noinput" expr="repeat_es[rand]"/>
     </if>
     <script>log(humain+': (noinput:2,reprompt)');</script>
     <script>log(machine+': '+noinput+' '+prompt);</script>
@@ -363,29 +379,6 @@ function update()
   </noinput>
 
   <noinput count="3">
-    <var name="rand"/>
-    <var name="noinput"/>
-    <if cond="lang=='fr'">
-      <assign name="rand" expr="Math.floor(Math.random()*(noinput_fr.length-1))"/>
-      <assign name="noinput" expr="repeat_fr[rand]"/>
-    </if>
-    <if cond="lang=='en'">
-      <assign name="rand" expr="Math.floor(Math.random()*(noinput_en.length-1))"/>
-      <assign name="noinput" expr="repeat_en[rand]"/>
-    </if>
-    <if cond="lang=='es'">
-      <assign name="rand" expr="Math.floor(Math.random()*(noinput_es.length-1))"/>
-      <assign name="noinput" expr="repeat_es[rand]"/>
-    </if>
-    <script>log(humain+': (noinput:3,reprompt)');</script>
-    <script>log(machine+': '+noinput+' '+prompt);</script>
-    <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="noinput"/></prompt>
-    <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="noinput"/></prompt>
-    <prompt cond="lang=='es'" xml:lang="es-ES"><value expr="noinput"/></prompt>
-    <reprompt/>
-  </noinput>
-
-  <noinput count="4">
     <assign name="result" expr="'NOINPUT'"/>
     <var name="noinput"/>
     <if cond="lang=='fr'">
@@ -397,7 +390,7 @@ function update()
     <if cond="lang=='es'">
       <assign name="noinput" expr="noinput_es[noinput_es.length-1]"/>
     </if>
-    <script>log(humain+': (noinput:4,hangup)');</script>
+    <script>log(humain+': (noinput:3,hangup)');</script>
     <script>log(machine+':  '+noinput);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR" bargein="false"><value expr="noinput"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK" bargein="false"><value expr="noinput"/></prompt>
@@ -431,16 +424,16 @@ function update()
     <var name="rand"/>
     <var name="nomatch"/>
     <if cond="lang=='fr'">
-      <assign name="rand" expr="Math.floor(Math.random()*(nomatch_fr.length-1))"/>
-      <assign name="nomatch" expr="nomatch_fr[rand]"/>
+      <assign name="rand" expr="Math.floor(Math.random()*(repeat_fr.length-1))"/>
+      <assign name="nomatch" expr="repeat_fr[rand]"/>
     </if>
     <if cond="lang=='en'">
-      <assign name="rand" expr="Math.floor(Math.random()*(nomatch_en.length-1))"/>
-      <assign name="nomatch" expr="nomatch_en[rand]"/>
+      <assign name="rand" expr="Math.floor(Math.random()*(repeat_en.length-1))"/>
+      <assign name="nomatch" expr="repeat_en[rand]"/>
     </if>
     <if cond="lang=='es'">
-      <assign name="rand" expr="Math.floor(Math.random()*(nomatch_es.length-1))"/>
-      <assign name="nomatch" expr="nomatch_es[rand]"/>
+      <assign name="rand" expr="Math.floor(Math.random()*(repeat_es.length-1))"/>
+      <assign name="nomatch" expr="repeat_es[rand]"/>
     </if>
     <script>log(humain+': (nomatch:2,reprompt) '+lastresult$.utterance);</script>
     <script>log(machine+': '+nomatch+' '+prompt);</script>
@@ -451,41 +444,18 @@ function update()
   </nomatch>
 
   <nomatch count="3">
-    <var name="rand"/>
+    <assign name="result" expr="'NOMATCH'"/>
     <var name="nomatch"/>
     <if cond="lang=='fr'">
-      <assign name="rand" expr="Math.floor(Math.random()*(nomatch_fr.length-1))"/>
-      <assign name="nomatch" expr="repeat_fr[rand]"/>
+      <assign name="nomatch" expr="nomatch_fr[nomatch_fr.length-1]"/>
     </if>
     <if cond="lang=='en'">
-      <assign name="rand" expr="Math.floor(Math.random()*(nomatch_en.length-1))"/>
-      <assign name="nomatch" expr="repeat_en[rand]"/>
+      <assign name="nomatch" expr="nomatch_en[nomatch_en.length-1]"/>
     </if>
     <if cond="lang=='es'">
-      <assign name="rand" expr="Math.floor(Math.random()*(nomatcht_es.length-1))"/>
-      <assign name="nomatch" expr="repeat_es[rand]"/>
+      <assign name="nomatch" expr="nomatch_es[nomatch_es.length-1]"/>
     </if>
-    <script>log(humain+': (nomatch:3,reprompt) '+lastresult$.utterance);</script>
-    <script>log(machine+': '+nomatch+' '+prompt);</script>
-    <prompt cond="lang=='fr'" xml:lang="fr-FR"><value expr="nomatch"/></prompt>
-    <prompt cond="lang=='en'" xml:lang="en-UK"><value expr="nomatch"/></prompt>
-    <prompt cond="lang=='es'" xml:lang="es-ES"><value expr="nomatch"/></prompt>
-    <reprompt/>
-  </nomatch>
-
-  <nomatch count="4">
-    <assign name="result" expr="'NOINPUT'"/>
-    <var name="nomatch"/>
-    <if cond="lang=='fr'">
-      <assign name="nomatch" expr="nomatch_fr[noinput_fr.length-1]"/>
-    </if>
-    <if cond="lang=='en'">
-      <assign name="nomatch" expr="nomatch_en[noinput_en.length-1]"/>
-    </if>
-    <if cond="lang=='es'">
-      <assign name="nomatch" expr="nomatch_es[noinput_es.length-1]"/>
-    </if>
-    <script>log(humain+': (nomatch:4,hangup) '+lastresult$.utterance);</script>
+    <script>log(humain+': (nomatch:3,hangup) '+lastresult$.utterance);</script>
     <script>log(machine+':  '+nomatch);</script>
     <prompt cond="lang=='fr'" xml:lang="fr-FR" bargein="false"><value expr="nomatch"/></prompt>
     <prompt cond="lang=='en'" xml:lang="en-UK" bargein="false"><value expr="nomatch"/></prompt>
@@ -515,7 +485,7 @@ function update()
     </block>
     <var name="phone" expr="caller" />
     <var name="datas" expr="set" />
-    <var name="subject" expr="'['+name.toUpperCase()+'] Call ('+caller+', '+queries+', '+result+')'"/>
+    <var name="subject" expr="'['+name.toUpperCase()+'] Call Ticket ('+caller+', '+queries+', '+result+')'"/>
     <var name="body" expr="''" />
     <block>
       <if cond="details">
@@ -527,7 +497,7 @@ function update()
     </block>
     <transfer cond="mail &amp;&amp; record" bridge="true" dest="execute:stopmixmonitor()"/>
     <transfer cond="mail &amp;&amp; record" name="filename" bridge="true" dest="execute:get(MIXMONITOR_FILENAME)" />
-    <object cond="mail &amp;&amp; record &amp; filename$.value!=''" name="attachment"  classid="pick">
+    <object cond="mail &amp;&amp; record &amp;&amp; filename$.value!=''" name="attachment"  classid="pick">
       <param name="src" expr="'file://'+filename$.value"/>
     </object>
     <block cond="database">
