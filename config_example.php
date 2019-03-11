@@ -3,6 +3,37 @@
 echo "!!! YOU NEED TO RENAME THIS FILE WITH config.php, AND REMOVE THIS 2 LINES !!!";
 exit;
 
+$headers = apache_request_headers();
+if (isset($_REQUEST['param']))
+{
+  $param=$_REQUEST['param'];
+}
+if (isset($headers['Voximal-Parameter']))
+{
+  $param=$headers['Voximal-Parameter'];
+}
+
+if (isset($param))
+$filename="configs/".$param.".php";
+
+if (false)
+if(isset($_SERVER['DATA'])) {
+  $oldtime = strtotime($_SERVER['DATE']);
+  $newtime = time() - 6000;
+
+  if (file_exists($config))
+  $newtime = filemtime($filename);
+
+  if ($oldtime < $newtime) {
+    header('HTTP/1.1 304 Not Modified');
+    exit;
+  }
+  else
+  {
+    header('Last-Modified: ', gmdate('D, d M Y H:i:s T', $newtime));
+  }
+}
+
 // Voxibot configuration file
 
 $config['db']['hostname'] = "localhost";
