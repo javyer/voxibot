@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<grammar version="1.0" xmlns="http://www.w3.org/2001/06/grammar" mode="dtmf" tag-format="semantics/1.0" root="choice">
+  <rule id="choice">
+    <one-of>
+      <item>1
+        <tag>true</tag>
+      </item>
+      <item>0
+        <tag>false</tag>
+      </item>
+    </one-of>
+  </rule>
+</grammar>

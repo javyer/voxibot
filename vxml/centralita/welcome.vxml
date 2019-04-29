@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml" application="../root.php" xml:lang="es-ES">
+
+  <var name="page" expr="'welcome'"/>
+  <var name="prompt"/>
+  <var name="audio"/>
+
+  <!-- Welcome -->
+  <form id="welcome">
+    <block>
+      <assign name="prompt" expr="'(jingle)'"/>
+      <assign name="audio" expr="'jingle'"/>
+
+      <script>log(machine+'('+page+'): '+audio+'='+prompt);</script>
+      <prompt cond="true">
+        <audio expr="'audio/'+audio+'.wav'"><value expr="prompt"/></audio>
+      </prompt>
+    </block>
+
+    <block>
+      <assign name="prompt" expr="'Servicio de pruebas.'"/>
+      <assign name="audio" expr="'welcome'"/>
+
+      <script>log(machine+'('+page+'): '+audio+'='+prompt);</script>
+      <prompt cond="true">
+        <audio expr="'audio/'+audio+'.wav'"><value expr="prompt"/></audio>
+      </prompt>
+    </block>
+
+    <block>
+      <goto next="menu.vxml"/>
+    </block>
+  </form>
+</vxml>

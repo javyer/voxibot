@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml" application="../root.php" xml:lang="es-ES">
+
+  <!-- Goodbye -->
+  <form id="goodbye">
+    <block>
+      <script>log('Goodbye');</script>
+      <prompt cond="true">
+        [500]Merci, et au revoir.
+      </prompt>
+      <disconnect />
+    </block>
+  </form>
+
+</vxml>

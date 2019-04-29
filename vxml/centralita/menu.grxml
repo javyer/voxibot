@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<grammar version="1.0" xmlns="http://www.w3.org/2001/06/grammar" mode="voice" tag-format="semantics/1.0" xml:lang="es-ES" root="choice">
+  <rule id="choice" scope="public">
+    <one-of>
+      <item>!uno
+        <tag>out='choice_1';</tag>
+      </item>
+      <item>!técnico
+        <tag>out='choice_1';</tag>
+      </item>
+      <item>!soporte
+        <tag>out='choice_1';</tag>
+      </item>
+
+      <item>!dos
+        <tag>out='choice_2';</tag>
+      </item>
+      <item>!comercial
+        <tag>out='choice_2';</tag>
+      </item>
+
+      <item>!tres
+        <tag>out='choice_3';</tag>
+      </item>
+      <item>!administración
+        <tag>out='choice_3';</tag>
+      </item>
+
+      <item>!ocho
+        <tag>out='choice_8';</tag>
+      </item>
+      <item>!agente
+        <tag>out='choice_8';</tag>
+      </item>
+      <item>!operador
+        <tag>out='choice_8';</tag>
+      </item>
+    </one-of>
+  </rule>
+</grammar>

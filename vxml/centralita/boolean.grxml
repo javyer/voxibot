@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<grammar version="1.0" xmlns="http://www.w3.org/2001/06/grammar" mode="voice" tag-format="semantics/1.0" xml:lang="es-ES" root="choice">
+  <rule id="choice" scope="public">
+    <one-of>
+      <item>uno
+        <tag>out='true';</tag>
+      </item>
+      <item>sí
+        <tag>out='true';</tag>
+      </item>
+      <item>claro
+        <tag>out='true';</tag>
+      </item>
+      <item>adelante
+        <tag>out='true';</tag>
+      </item>
+      <item>validar
+        <tag>out='true';</tag>
+      </item>
+      <item>eh
+        <tag>out='true';</tag>
+      </item>
+
+      <item>zero
+        <tag>out='false';</tag>
+      </item>
+      <item>no
+        <tag>out='false';</tag>
+      </item>
+      <item>falso
+        <tag>out='false';</tag>
+      </item>
+      <item>incorrecto
+        <tag>out='false';</tag>
+      </item>
+      <item>menú
+        <tag>out='false';</tag>
+      </item>
+      <item>atrás
+        <tag>out='false';</tag>
+      </item>
+      <item>equivacado
+        <tag>out='false';</tag>
+      </item>
+    </one-of>
+  </rule>
+</grammar>

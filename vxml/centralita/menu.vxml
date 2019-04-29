@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml" application="../root.php" xml:lang="es-ES">
+  <property name="confidencelevel" value="0.5"/>
+  <property name="bargein" value="true"/>
+  <property name="bargeintype" value="hotword"/>
+  <property name="completetimeout" value="0.5s"/>
+
+  <var name="page" expr="'menu'"/>
+  <var name="prompt"/>
+  <var name="prompt2"/>
+  <var name="prompt3"/>
+  <var name="audio"/>
+  <var name="title"/>
+
+  <!-- Menu -->
+  <form id="menu">
+    <block name="block_intro">
+      <assign name="prompt" expr="'Menú principal.'"/>
+      <assign name="audio" expr="'menu_welcome'"/>
+      <script>log(machine+'('+page+'): '+audio+'='+prompt);</script>
+
+      <prompt cond="true">
+        <audio expr="'audio/'+audio+'.wav'"><value expr="prompt"/></audio>
+      </prompt>
+    </block>
+
+    <block name="block_choice">
+      <assign name="prompt" expr="'Seleccione el servicio que quiere contactar:
+Diga, departamento tecnico, o pulse 1.
+Diga, departamento comercial, o pulse 2.
+O diga, administración, ó pulse 3.'"/>
+      <assign name="audio" expr="'menu_prompt'"/>
+
+      <script>log(machine+'('+page+'): '+audio+'='+prompt);</script>
+    </block>
+
+    <field name="field_choice">
+      <grammar src="menu.grxml"/>
+      <grammar src="menu_dtmf.grxml"/>
+      <prompt count="1" cond="true">
+        <audio expr="'audio/'+audio+'.wav'"><value expr="prompt"/></audio>
+      </prompt>
+      <prompt count="2" cond="true">
+        <audio expr="'audio/'+audio+'.wav'"><value expr="prompt"/></audio>
+      </prompt>
+      <prompt count="3" cond="true">
+        <audio expr="'audio/'+audio+'.wav'"><value expr="prompt"/></audio>
+      </prompt>
+      <filled>
+        <assign name="queries" expr="queries+1" />
+        <script>log(humain+'('+page+'): '+field_choice+' ('+field_choice$.utterance+':'+field_choice$.confidence+')');</script>
+        <if cond="field_choice == 'choice_1'">
+          <assign name="title" expr="'departamento técnico'"/>
+          <assign name="destination" expr="'601'"/>
+        <elseif cond="field_choice == 'choice_2'"/>
+          <assign name="title" expr="'departamento comercial'"/>
+          <assign name="destination" expr="'602'"/>
+        <elseif cond="field_choice == 'choice_3'"/>
+          <assign name="title" expr="'administracion'"/>
+          <assign name="destination" expr="'603'"/>
+        <else/>
+          <clear namelist="field_choice"/>
+          <throw event="nomatch"/>
+        </if>
+      </filled>
+    </field>
+
+    <block cond="destination" name="block_confirmation">
+      <if cond="title == null">
+        <assign name="prompt" expr="'Ha seleccionado la extensión '+destination+'. Para validar, diga Sí, o pulse 1. Para volver al menu, diga No, o pulse 0.'"/>
+      <else/>
+        <assign name="prompt" expr="'Ha seleccionado '+title+'. Para validar, diga Sí, o pulse 1. Para volver al menu, diga No, o pulse 0, .'"/>
+      </if>
+      <assign name="audio" expr="'extension'"/>
+      <script>log(machine+'('+page+':'+destination+'): '+audio+'='+prompt);</script>
+    </block>
+
+    <field cond="destination" name="field_confirmation">
+      <grammar mode="voice" src="boolean.grxml"/>
+      <grammar src="boolean_dtmf.grxml"/>
+			<grammar mode="voice" src="builtin:grammar/text"/>
+
+      <prompt count="1" cond="true">
+        <audio expr="'audio/'+audio+'.wav'"><value expr="prompt"/></audio>
+      </prompt>
+      <prompt count="2" cond="true">
+        <audio expr="'audio/'+audio+'.wav'"><value expr="prompt"/></audio>
+      </prompt>
+      <prompt count="3" cond="true">
+        <audio expr="'audio/'+audio+'.wav'"><value expr="prompt"/></audio>
+      </prompt>
+      <filled>
+        <assign name="queries" expr="queries+1" />
+        <script>log(humain+'('+page+'): '+field_confirmation+' ('+field_confirmation$.utterance+':'+field_confirmation$.confidence+')');</script>
+        <if cond="field_confirmation == 'false'">
+          <clear namelist="block_choice field_choice block_confirmation field_confirmation"/>
+        <elseif cond="field_confirmation == 'true'"/>
+        <else/>
+          <clear namelist="block_confirmation field_confirmation"/>
+          <throw event="nomatch"/>
+        </if>
+      </filled>
+    </field>
+
+    <block name="block_transfer">
+      <if cond="title == null">
+        <assign name="prompt" expr="'Transferimos su llamada... a la extensión '+destination"/>
+      <else/>
+        <assign name="prompt" expr="'Transferimos su llamada... '+title"/>
+      </if>
+      <assign name="audio" expr="'transfer_'+destination+'.wav'"/>
+      <script>log(machine+'('+page+':'+destination+'): '+audio+'='+prompt);</script>
+      <assign name="result" expr="'TRANSFER TO='+destination"/>
+    </block>
+
+    <transfer name="transfer" bridge="false" destexpr="'dial:SIP/'+destination" connecttimeout="20s" maxtime="10s">
+      <prompt cond="true">
+        <audio expr="'audio/'+audio+'.wav'"><value expr="prompt"/></audio>
+      </prompt>
+    </transfer>
+  </form>
+
+</vxml>
