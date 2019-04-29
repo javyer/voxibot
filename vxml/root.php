@@ -1,5 +1,16 @@
-<vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
-  <?php include("../config.php"); ?>
+<?php
+
+include("../config.php");
+
+/*
+    header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+    header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
+    header('Cache-Control: post-check=0, pre-check=0',false);
+    header('Pragma: no-cache');
+    header('Content-Type: text/html; charset=utf-8');
+*/
+
+?><vxml version="2.1" xmlns="http://www.w3.org/2001/vxml">
 
   <!-- TTS configuration -->
 <?php if (isset($config['prompt']['api'])) { ?>
@@ -173,7 +184,7 @@
   <var name="welcome_es" expr="'Esta llamada automatica sera grabada.'"/><!-- Welcome message -->
   <var name="noinput_es" expr="[
   'No te oigo.',
-  'Discupla no consigo oirte. Llamame más tarde. Adíos.'
+  'Disculpa no consigo oirte. Llamame más tarde. Adíos.'
   ]"/><!-- Noinput messages -->
   <var name="nomatch_es" expr="[
   'No te entiendo.',
@@ -184,7 +195,11 @@
   'Lo repito de nuevo:',
   ]"/><!-- Repeat messages -->
 
+<?php if (isset($config['prompt']['jingle']) && $config['prompt']['jingle']) { ?>
   <var name="jingle" expr="'<?php echo($config['prompt']['jingle']); ?>'"/>
+<?php } else { ?>
+  <var name="jingle" expr="''"/>
+<?php } ?>
   <var name="welcome" expr="''"/>
 
   <var name="echo" expr="false"/>
@@ -235,6 +250,15 @@
 <?php if (isset($config['chatbot']['license'])) { ?>
   <var name="license" expr="'<?php echo($config['chatbot']['license']); ?>'"/>
 <?php } ?>
+<?php if (isset($config['chatbot']['initial'])) { ?>
+  <var name="initial" expr="'<?php echo($config['chatbot']['initial']); ?>'"/>
+<?php } ?>
+<?php if (isset($config['chatbot']['url'])) { ?>
+  <var name="chatboturl" expr="'<?php echo($config['chatbot']['url']); ?>'"/>
+<?php } ?>
+<?php if (isset($config['chatbot']['workspace'])) { ?>
+  <var name="workspace" expr="'<?php echo($config['chatbot']['workspace']); ?>'"/>
+<?php } ?>
 
 <?php if (isset($config['chatbot']['headers'])) { ?>
   <property name="extraheaders" value="<?php echo($config['chatbot']['headers']); ?>"/>
@@ -284,7 +308,7 @@ function update()
   application.date =
       start_date.getFullYear()+
       '-'+
-      n(start_date.getMonth())+
+      n(start_date.getMonth()+1)+
       '-'+
       n(start_date.getDate())+
       ' '+
