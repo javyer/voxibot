@@ -2,44 +2,44 @@
 <grammar version="1.0" xmlns="http://www.w3.org/2001/06/grammar" mode="voice" tag-format="semantics/1.0" xml:lang="es-ES" root="choice">
   <rule id="choice" scope="public">
     <one-of>
-      <item>uno
+      <item>!uno
         <tag>out='true';</tag>
       </item>
-      <item>sí
+      <item>!sí
         <tag>out='true';</tag>
       </item>
-      <item>claro
+      <item>!claro
         <tag>out='true';</tag>
       </item>
-      <item>adelante
+      <item>!adelante
         <tag>out='true';</tag>
       </item>
-      <item>validar
+      <item>!validar
         <tag>out='true';</tag>
       </item>
-      <item>eh
+      <item>!eh
         <tag>out='true';</tag>
       </item>
 
-      <item>zero
+      <item>!zero
         <tag>out='false';</tag>
       </item>
-      <item>no
+      <item>!no
         <tag>out='false';</tag>
       </item>
-      <item>falso
+      <item>!falso
         <tag>out='false';</tag>
       </item>
-      <item>incorrecto
+      <item>!incorrecto
         <tag>out='false';</tag>
       </item>
-      <item>menú
+      <item>!menú
         <tag>out='false';</tag>
       </item>
-      <item>atrás
+      <item>!atrás
         <tag>out='false';</tag>
       </item>
-      <item>equivacado
+      <item>!equivacado
         <tag>out='false';</tag>
       </item>
     </one-of>
