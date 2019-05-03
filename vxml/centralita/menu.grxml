@@ -26,15 +26,6 @@
         <tag>out='choice_3';</tag>
       </item>
 
-      <item>!ocho
-        <tag>out='choice_8';</tag>
-      </item>
-      <item>!agente
-        <tag>out='choice_8';</tag>
-      </item>
-      <item>!operador
-        <tag>out='choice_8';</tag>
-      </item>
     </one-of>
   </rule>
 </grammar>
