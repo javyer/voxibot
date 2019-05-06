@@ -17,11 +17,14 @@
       <item>!validar
         <tag>out='true';</tag>
       </item>
-      <item>!eh
+      <item>!correcto
         <tag>out='true';</tag>
       </item>
 
-      <item>!zero
+      <item>!cero
+        <tag>out='false';</tag>
+      </item>
+      <item>!volver
         <tag>out='false';</tag>
       </item>
       <item>!no
@@ -39,7 +42,7 @@
       <item>!atrás
         <tag>out='false';</tag>
       </item>
-      <item>!equivacado
+      <item>!equivocado
         <tag>out='false';</tag>
       </item>
     </one-of>
